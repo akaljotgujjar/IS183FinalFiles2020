@@ -16,12 +16,17 @@ export class BeveragesComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await this.getBeverages();
+    // await this.getBeverages();
+    this.beverages = [];
+    this.getBeverages();
   }
 
   async getBeverages() {
-    const resp = await this.beverageService.getBeverages();
-    this.beverages = resp;
+    // const resp = await this.beverageService.getBeverages();
+    // this.beverages = resp;
+    this.beverageService.getBeverages().then((resp) => {
+      this.beverages = resp;
+    });
   }
 
   goToCreate() {
@@ -29,7 +34,13 @@ export class BeveragesComponent implements OnInit {
   }
 
   deleteBeverage(id: string) {
-
+    this.beverageService.deleteBeverage(id).then((resp) => {
+      if (resp) {
+        this.beverages = this.beverages.filter((beverage) => {
+          return beverage['id'] !== id;
+        });
+      }
+    });
   }
 
 }
